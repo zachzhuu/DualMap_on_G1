@@ -22,7 +22,7 @@ yolo:
 
   ## The given classes lists
   ## Indoor Classes List
-  given_classes_path: ./config/class_list/gpt_indoor_general.txt
+  given_classes_path: config/class_list/gpt_indoor_office.txt
   # given_classes_path: ./config/class_list/gpt_indoor_office.txt
   # given_classes_path: ./config/class_list/gpt_indoor_apartment.txt
   # given_classes_path: ./config/class_list/gpt_indoor_classroom.txt

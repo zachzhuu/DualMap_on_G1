@@ -400,7 +400,27 @@ class ScanNetDataset(BaseDataset):
 
         for pose_path in pose_path_list:
             pose = np.loadtxt(pose_path).reshape(4, 4)
-            c2w = torch.from_numpy(pose).float()
+
+            transformation_matrix = pose
+
+            # Extract rotation and translation
+            rotation_matrix = transformation_matrix[:3, :3]
+            translation = transformation_matrix[:3, 3]
+            
+            # Rebuild transformation matrix
+            T = np.eye(4)
+            T[:3, :3] = rotation_matrix
+            T[:3, 3] = translation
+
+            # Flip world YZ axes to ROS convention
+            T[:, 1:3] *= -1
+
+            # Rotate world frame: +90 deg around X
+            T_fix = np.eye(4)
+            T_fix[:3, :3] = R.from_euler("x", 90, degrees=True).as_matrix()
+            transformation_matrix = T_fix @ T
+
+            c2w = torch.from_numpy(transformation_matrix).float()
             poses.append(c2w)
 
         logger.info(f"[Dataset] Number of pose: {len(poses)}")

@@ -1,16 +1,21 @@
 dataset_name: 'self_collected'
 
 ros_topics:
-  rgb: "/camera/rgb/image_raw"
-  depth: "/camera/depth/image_raw"
-  odom: "/camera/pose"
-  camera_info: "/camera_info"
+  rgb: "/camera/color/image_restamped"
+  depth: "/camera/depth/image_restamped"
+  odom: "/Odometry"
+  camera_info: "/camera/depth/camera_info_restamped"
 
 # Depth factor for converting depth values from millimeters to meters
 depth_factor: 1000.0
 
 intrinsic:
-  fx: 600
-  fy: 600
-  cx: 600
-  cy: 340
+  fx: 604.4072265625
+  fy: 605.145751953125
+  cx: 333.2305908203125
+  cy: 249.94580078125
+
+extrinsics: [[0.01942219, -0.65475244,  0.75559382, -0.0460436 ],
+             [ 0.99919184,  0.03931177,  0.00838147, -0.04852991],
+             [-0.03519152,  0.75482039,  0.65498682,  0.12737442],
+             [ 0., 0., 0., 1.]]
