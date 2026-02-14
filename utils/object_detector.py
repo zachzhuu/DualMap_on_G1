@@ -549,6 +549,7 @@ class Detector:
             logger.warning("[Detector] No detections found in curr frame.")
             # set current results as empty dict
             self.curr_results = {}
+            self.curr_detections = None
             return
         with timing_context("Segmentation", self):
             sam_out = self.sam.predict(color, bboxes=xyxy, verbose=False)
@@ -674,6 +675,12 @@ class Detector:
             # Waiting for FastSAM to finish
             if self.cfg.use_fastsam:
                 fastsam_thread.join()
+
+        # Check if we have any detections from YOLO+SAM
+        if self.curr_detections is None:
+            logger.warning("[Detector] No detections to process.")
+            self.curr_results = {}
+            return
 
         with timing_context("Detection Filter", self):
             self.filter.update_detections(self.curr_detections, color)

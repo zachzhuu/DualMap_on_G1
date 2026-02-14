@@ -24,6 +24,8 @@ def main(cfg: DictConfig):
 
     ros_version = detect_ros_version()
 
+    use_g1 = True
+
     if ros_version == "ros1":
         logger.warning("[runner_ros] Detected ROS1 environment. Running ROS1 runner.")
         from applications.utils.runner_ros1 import run_ros1
@@ -31,10 +33,16 @@ def main(cfg: DictConfig):
         run_ros1(cfg)
 
     elif ros_version == "ros2":
-        logger.warning("[runner_ros] Detected ROS2 environment. Running ROS2 runner.")
-        from applications.utils.runner_ros2 import run_ros2
+        if use_g1:
+            logger.warning("[runner_ros] Detected ROS2 environment. Running ROS2 G1 runner.")
+            from applications.utils.runner_ros2_g1 import run_ros2_g1
+            
+            run_ros2_g1(cfg)
+        else: 
+            logger.warning("[runner_ros] Detected ROS2 environment. Running ROS2 runner.")
+            from applications.utils.runner_ros2 import run_ros2
 
-        run_ros2(cfg)
+            run_ros2(cfg)
     else:
         logger.error("[runner_ros] Could not detect ROS1 or ROS2 environment.")
         raise RuntimeError(
